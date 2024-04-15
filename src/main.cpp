@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <Adafruit_ILI9341.h>
 
 // put function declarations here:
 int myFunction(int, int);
