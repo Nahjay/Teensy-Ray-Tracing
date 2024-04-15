@@ -10,6 +10,11 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  // Print the result to the serial monitor
+
+  Serial.begin(9600);
+  Serial.println("Hello World!");
+  delay(1000);
 }
 
 // put function definitions here:
