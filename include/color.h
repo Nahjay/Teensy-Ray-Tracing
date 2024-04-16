@@ -14,6 +14,7 @@ inline double linear_to_gamma(double linear_component) {
   if (linear_component > 0) {
     return sqrt(linear_component);
   }
+  return 0;
 }
 
 void writeColor(int x, int y, Color pixelColor, Adafruit_ILI9341& tft) {
