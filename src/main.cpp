@@ -139,7 +139,8 @@ void loop() {
   //     Serial.println(y);
 
 
-  //     // Write the color to the display
+  //     // Write the color to the display 
+  
   //     writeColor(x, y, pixel_color, tft);
   //   }
   // }
