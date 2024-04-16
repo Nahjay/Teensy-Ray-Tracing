@@ -102,12 +102,6 @@ uint16_t traceRay(Vector3 origin, Vector3 dir, Sphere sphere, Light light, int d
   Vector3 toLight = (light.position - hitPoint).normalize();
   float lightDistance = (light.position - hitPoint).length();
 
-  // Shadow calculation
-  float shadowT;
-  if (intersect(hitPoint + normal * 0.001f, toLight, sphere, shadowT) && shadowT < lightDistance) {
-    return ILI9341_BLACK; // Shadow
-  }
-
   // Lighting calculation
   float intensity = std::max(0.0f, normal.dot(toLight)) / (lightDistance * lightDistance);
   intensity = std::max(0.0f, std::min(1.0f, intensity)); // Clamp intensity to [0, 1]
@@ -159,8 +153,8 @@ void loop() {
   Sphere sphere = {
     .center = {120, 160, 100},
     .radius = 50,
-    .refractiveIndex = 1.5,
-    .reflectivity = 0.5,
+    .refractiveIndex = 2,
+    .reflectivity = 0.90,
     .color = ILI9341_RED
   };
 
