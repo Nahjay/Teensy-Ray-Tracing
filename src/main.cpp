@@ -110,7 +110,6 @@ uint16_t traceRay(Vector3 origin, Vector3 dir, Sphere sphere, Light light, int d
   float distanceRatio = std::min(1.0f, lightDistance / 200.0f); // Assuming a maximum distance of 200 units
 
   // Use the distance ratio to mix the sphere color with another color
-  // uint16_t color = mixColors(sphere.color, ILI9341_BLUE, distanceRatio);
   uint16_t color = mixColors(sphere.color * intensity, sphere.color , distanceRatio);
 
   // Handling reflections and refractions
@@ -160,7 +159,7 @@ void loop() {
 
   // Define the light source
   Light light = {
-    .position = {100, 100, 10}, // Moved farther
+    .position = {100, 100, 90}, // Moved farther
     .intensity = 1.0
   };
 
