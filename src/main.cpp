@@ -89,14 +89,6 @@ bool intersect(const Vector3& rayOrigin, const Vector3& rayDirection, const Sphe
   }
 }
 
-void drawGradientBackground(uint16_t color1, uint16_t color2) {
-  for (int y = 0; y < tft.height(); y++) {
-    float ratio = (float)y / tft.height();
-    uint16_t color = mixColors(color1, color2, ratio);
-    tft.drawFastHLine(0, y, tft.width(), color);
-  }
-}
-
 uint16_t traceRay(Vector3 origin, Vector3 dir, Sphere sphere, Light light, int depth) {
   float t;
   if (!intersect(origin, dir, sphere, t)) {
