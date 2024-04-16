@@ -127,7 +127,7 @@ uint16_t traceRay(Vector3 origin, Vector3 dir, Sphere sphere, Light light, int d
       Vector3 refractedDir = dir * eta + normal * (eta * cosi - std::sqrt(k));
       uint16_t refractionColor = traceRay(hitPoint - normal * 0.001f, refractedDir, sphere, light, depth + 1);
       color = refractionColor;
-    } else {
+    } else {    
       color = reflectionColor;
     }
   }
@@ -160,7 +160,7 @@ void loop() {
 
   // Define the light source
   Light light = {
-    .position = {100, 100, 100}, // Moved farther
+    .position = {100, 100, 10}, // Moved farther
     .intensity = 1.0
   };
 
@@ -173,6 +173,11 @@ void loop() {
       Vector3 dir = {(float)x - camera.x, (float)y - camera.y, 100 - camera.z};
       uint16_t color = traceRay(camera, dir.normalize(), sphere, light, 0);
       tft.drawPixel(x, y, color);
+
+      // Draw every 35th ray
+      if (x % 35 == 0 && y % 35 == 0) {
+        tft.drawLine(camera.x, camera.y, x, y, ILI9341_WHITE);
+      }      
     }
   }  
 
