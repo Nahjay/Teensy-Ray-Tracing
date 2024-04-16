@@ -161,6 +161,70 @@ void drawGradientBackground(uint16_t color1, uint16_t color2) {
 //     return ILI9341_BLACK; // Return black if the ray doesn't intersect the sphere
 //   }
 // }
+// uint16_t traceRay(Vector3 origin, Vector3 dir, const std::vector<Sphere>& spheres, Light light, int depth) {
+//   float closestT = std::numeric_limits<float>::max();
+//   uint16_t closestColor = ILI9341_BLACK; // Background color
+
+//   for (const Sphere& sphere : spheres) {
+//     float t;
+//     if (intersect(origin, dir, sphere, t)) {
+//       Vector3 hit = origin + dir * t;
+//       Vector3 normal = (hit - sphere.center).normalize();
+//       Vector3 lightDir = (light.position - hit).normalize();
+//       float distanceToLight = (light.position - hit).length();
+//       float intensity = max(0.0, normal.dot(lightDir)) / (distanceToLight * distanceToLight); // Apply the inverse square law
+//       intensity = min(1.0, intensity); // Clamp the intensity between 0.0 and 1.0
+//       uint16_t color = intensity * ILI9341_WHITE;
+
+//       if (depth < 3) { // Limit the recursion depth to 3
+//         // Calculate the reflection ray
+//         Vector3 reflectionDir = dir - normal * 2.0 * normal.dot(dir);
+
+//         // Cast a reflection ray
+//         uint16_t reflection_color = traceRay(hit + normal * 0.001f, reflectionDir, spheres, light, depth + 1);
+
+//         // If the sphere is transparent
+//         if (sphere.transparency > 0) {
+//           // Calculate the refracted ray
+//           float eta = 1 / sphere.refractiveIndex;
+//           float cosi = -normal.dot(dir);
+//           float k = 1 - eta * eta * (1 - cosi * cosi);
+//           if (k < 0) {
+//             // Total internal reflection, no refraction
+//             color = reflection_color;
+//           } else {
+//             Vector3 refractedDir = dir * eta + normal * (eta * cosi - sqrt(k));
+
+//             // Cast a refracted ray
+//             uint16_t refracted_color = traceRay(hit - normal * 0.001f, refractedDir, spheres, light, depth + 1);
+
+//             // Use the Fresnel equations to calculate the ratio of reflection to refraction
+//             float R0 = (1 - sphere.refractiveIndex) / (1 + sphere.refractiveIndex);
+//             R0 = R0 * R0;
+//             float cosX = -normal.dot(dir);
+//             if (sphere.refractiveIndex > 1) {
+//               cosX = sqrt(1 - sphere.refractiveIndex * sphere.refractiveIndex * (1 - cosX * cosX));
+//             }
+//             float R = R0 + (1 - R0) * pow(1 - cosX, 5);
+
+//             // Combine the reflection and refraction colors
+//             color = mixColors(reflection_color, refracted_color, R);
+//           }
+//         } else {
+//           // If the sphere is not transparent, just use the reflection color
+//           color = reflection_color;
+//         }
+//       }
+
+//       if (t < closestT) {
+//         closestT = t;
+//         closestColor = color;
+//       }
+//     }
+//   }
+
+//   return closestColor;
+// }
 uint16_t traceRay(Vector3 origin, Vector3 dir, const std::vector<Sphere>& spheres, Light light, int depth) {
   float closestT = std::numeric_limits<float>::max();
   uint16_t closestColor = ILI9341_BLACK; // Background color
@@ -176,12 +240,20 @@ uint16_t traceRay(Vector3 origin, Vector3 dir, const std::vector<Sphere>& sphere
       intensity = min(1.0, intensity); // Clamp the intensity between 0.0 and 1.0
       uint16_t color = intensity * ILI9341_WHITE;
 
+      Serial.print("Intersection at t = ");
+      Serial.println(t);
+      Serial.print("Intensity = ");
+      Serial.println(intensity);
+
       if (depth < 3) { // Limit the recursion depth to 3
         // Calculate the reflection ray
         Vector3 reflectionDir = dir - normal * 2.0 * normal.dot(dir);
 
         // Cast a reflection ray
         uint16_t reflection_color = traceRay(hit + normal * 0.001f, reflectionDir, spheres, light, depth + 1);
+
+        Serial.print("Reflection color = ");
+        Serial.println(reflection_color, HEX);
 
         // If the sphere is transparent
         if (sphere.transparency > 0) {
@@ -197,6 +269,9 @@ uint16_t traceRay(Vector3 origin, Vector3 dir, const std::vector<Sphere>& sphere
 
             // Cast a refracted ray
             uint16_t refracted_color = traceRay(hit - normal * 0.001f, refractedDir, spheres, light, depth + 1);
+
+            Serial.print("Refracted color = ");
+            Serial.println(refracted_color, HEX);
 
             // Use the Fresnel equations to calculate the ratio of reflection to refraction
             float R0 = (1 - sphere.refractiveIndex) / (1 + sphere.refractiveIndex);
@@ -225,7 +300,6 @@ uint16_t traceRay(Vector3 origin, Vector3 dir, const std::vector<Sphere>& sphere
 
   return closestColor;
 }
-
 
 void setup() {
   // Set up the display by beginning the SPI connection
@@ -326,13 +400,13 @@ void loop() {
   // Vector3 eye = {0, 0, 0}; // Camera/eye position
 
   // Light source is moved closer to the spheres and has a higher intensity
-  Light light = {{50, 50, 50}, 100000.0};
+  Light light = {{0, 0, 0}, 1000000.0};
 
   // Metallic sphere is moved closer to the eye and has a larger radius
-  Sphere metallicSphere = {{30, 30, -50}, 10, 0.15, 0.9, 0.1}; 
+  Sphere metallicSphere = {{30, 30, -50}, 10, 0.2, 0.1, 0.1}; 
 
   // Water sphere is moved closer to the eye, has a larger radius, and is positioned so it doesn't overlap with the metallic sphere
-  Sphere waterSphere = {{70, 70, -50}, 10, 1.33, 0.1, 0.9}; 
+  Sphere waterSphere = {{70, 70, -50}, 10, 1.33, 0.1, 0.8}; 
 
   // Create a vector of spheres
   std::vector<Sphere> spheres = {metallicSphere, waterSphere};
@@ -366,7 +440,7 @@ for (int y = 0; y < tft.height(); y++) {
     rayDir = rayDir.normalize();
 
     // Trace the ray and get the color of the pixel
-    uint16_t color = traceRay(eye, rayDir, spheres, light, 1000);
+    uint16_t color = traceRay(eye, rayDir, spheres, light, 100);
 
     // If an intersection was found, print some debugging information
     if (color != ILI9341_BLACK) {
