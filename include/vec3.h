@@ -57,8 +57,7 @@ class Vector3 {
 };
 
 // Create aliases for Vector3
-using Point3 = Vector3;   // 3D point
-using Color = Vector3;    // RGB color
+using point3 = Vector3;   // 3D point
 
 // Utility Functions
 
