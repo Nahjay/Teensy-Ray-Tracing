@@ -13,6 +13,16 @@
 // Create an instance of the display
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
 
+// Defining a simple hit shpere function
+bool hit_sphere(const point3& center, double radius, const ray& r) {
+  Vector3 oc = r.origin() - center;
+  auto a = dot(r.direction(), r.direction());
+  auto b = 2.0 * dot(oc, r.direction());
+  auto c = dot(oc, oc) - radius * radius;
+  auto discriminant = b*b - 4*a*c;
+  return (discriminant >= 0);
+}
+
 // Define the color function
 Color ray_color(const ray& r) {
   // If the ray hits the sphere, return red
@@ -39,16 +49,6 @@ Color ray_color(const ray& r) {
   Serial.println(color.z());
 
   return color;
-}
-
-// Defining a simple hit shpere function
-bool hit_sphere(const point3& center, double radius, const ray& r) {
-  Vector3 oc = r.origin() - center;
-  auto a = dot(r.direction(), r.direction());
-  auto b = 2.0 * dot(oc, r.direction());
-  auto c = dot(oc, oc) - radius * radius;
-  auto discriminant = b*b - 4*a*c;
-  return (discriminant >= 0);
 }
 
 void setup() {
@@ -82,7 +82,7 @@ void loop() {
   auto vertical = Vector3(0, -viewport_height, 0);
 
   // Calculate the location of the upper left pixel should be 0, 0, 0
-  auto viewport_upper_left = camera_origin;
+  auto viewport_upper_left = camera_origin - horizontal / 2 - vertical / 2 - Vector3(0, 0, 1);
 
   // Render the image
   for (int y = 0; y < tft.height(); y++) {
@@ -91,7 +91,7 @@ void loop() {
       auto v = double(y) / (tft.height() - 1);
 
       // Calculate the ray
-      ray r(camera_origin, viewport_upper_left + u * horizontal + v * vertical);
+      ray r(camera_origin, viewport_upper_left + u * horizontal + v * vertical - camera_origin);
 
       // Get the color of the ray
       Color pixel_color = ray_color(r);
@@ -115,9 +115,6 @@ void loop() {
       writeColor(x, y, pixel_color, tft);
     }
   }
-
-  
-
   // tft.fillScreen(ILI9341_BLUE);
   
   delay(1000000); // Delay to view the result for a while
