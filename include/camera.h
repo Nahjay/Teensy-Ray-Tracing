@@ -9,22 +9,9 @@
 const double infi = std::numeric_limits<double>::infinity();
 
 class camera {
-    int sample_per_pixel = 10;
-
     public:
-        // void render(Adafruit_ILI9341& tft, const hittable& world) {
-        //     initialize(tft);
-
-        //     for (int j = tft.height() - 1; j >= 0; --j) {
-        //         for (int i = 0; i < tft.width(); ++i) {
-        //             auto u = double(i) / (tft.width() - 1);
-        //             auto v = double(j) / (tft.height() - 1);
-        //             ray r(camera_origin, viewport_upper_left + u * horizontal + v * vertical - camera_origin);
-        //             Color pixel_color = ray_color(r, world);
-        //             writeColor(i, j, pixel_color, tft);
-        //         }
-        //     }
-        // }
+        int sample_per_pixel;
+        
         void render(Adafruit_ILI9341& tft, const hittable& world) {
             initialize(tft);
 
