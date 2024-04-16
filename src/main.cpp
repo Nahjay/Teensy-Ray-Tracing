@@ -102,6 +102,12 @@ uint16_t traceRay(Vector3 origin, Vector3 dir, Sphere sphere, Light light, int d
   Vector3 toLight = (light.position - hitPoint).normalize();
   float lightDistance = (light.position - hitPoint).length();
 
+  // Shadow calculation
+  float shadowT;
+  if (intersect(hitPoint + normal * 0.001f, toLight, sphere, shadowT) && shadowT < lightDistance) {
+    return ILI9341_BLACK; // Shadow
+  }
+
   // Lighting calculation
   float intensity = std::max(0.0f, normal.dot(toLight)) / (lightDistance * lightDistance);
   intensity = std::max(0.0f, std::min(1.0f, intensity)); // Clamp intensity to [0, 1]
@@ -160,11 +166,9 @@ void loop() {
 
   // Define the light source
   Light light = {
-    .position = {100, 100, 0}, // Moved farther
+    .position = {100, 100, 100}, // Moved farther
     .intensity = 1.0
   };
-  // Draw the gradient background
-  // drawGradientBackground(ILI9341_BLUE, ILI9341_WHITE);
 
   // Position of the camera
   Vector3 camera = {120, 160, 0};
@@ -177,8 +181,6 @@ void loop() {
       tft.drawPixel(x, y, color);
     }
   }  
-
-
 
 
   delay(1000000); // Delay to view the result for a while
