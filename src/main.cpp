@@ -14,7 +14,7 @@
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
 
 // Defining a simple hit shpere function
-bool hit_sphere(const point3& center, double radius, const ray& r) {
+double hit_sphere(const point3& center, double radius, const ray& r) {
   Vector3 oc = center - r.origin();
   auto a = r.direction().length_squared();
   auto h = dot(r.direction(), oc);
