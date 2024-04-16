@@ -65,7 +65,7 @@ class camera {
         }
 
         hit_record rec;
-        if (world.hit(r, interval(0, infi), rec)) {
+        if (world.hit(r, interval(0.001, infi), rec)) {
             Vector3 direction = random_on_hemisphere(rec.normal);
             return 0.5 * ray_color(ray(rec.p, direction), depth-1, world);
             // return 0.5 * Color(rec.normal.x() + 1, rec.normal.y() + 1, rec.normal.z() + 1);
