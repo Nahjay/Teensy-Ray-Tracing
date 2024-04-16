@@ -14,9 +14,9 @@ class Vector3 {
     double x() const { return e[0]; }
     double y() const { return e[1]; }
     double z() const { return e[2]; }
-    double random_double() {
-        return rand() / (RAND_MAX + 1.0);
-    }
+    // double random_double() {
+    //     return rand() / (RAND_MAX + 1.0);
+    // }
 
 
     Vector3 operator-() const { return Vector3(-e[0], -e[1], -e[2]); }
@@ -47,6 +47,22 @@ class Vector3 {
 
     double length_squared() const {
         return e[0]*e[0] + e[1]*e[1] + e[2]*e[2];
+    }
+
+    static double random_double() {
+        return rand() / (RAND_MAX + 1.0);
+    }
+
+    static double random_double(double min, double max) {
+        return min + (max-min)*random_double();
+    }
+
+    static Vector3 random() {
+        return Vector3(random_double(), random_double(), random_double());
+    }
+
+    static Vector3 random(double min, double max) {
+        return Vector3(random_double(min, max), random_double(min, max), random_double(min, max));
     }
 
     bool near_zero() const {
@@ -117,45 +133,24 @@ inline Vector3 unit_vector(Vector3 v) {
     return v / v.length();
 }
 
-// struct Vector3 {
-//   float x, y, z;
+inline Vector3 random_in_unit_sphere() {
+    while (true) {
+        auto p = Vector3::random(-1, 1);
+        if (p.length_squared() >= 1) continue;
+        return p;
+    }
+}
 
-//   // Vector addition
-//   Vector3 operator +(const Vector3& v) const {
-//     return {x + v.x, y + v.y, z + v.z};
-//   }
+inline Vector3 random_unit_vector() {
+    return unit_vector(random_in_unit_sphere());
+}
 
-//   // Vector subtraction
-//   Vector3 operator -(const Vector3& v) const {
-//     return {x - v.x, y - v.y, z - v.z};
-//   }
-
-//   // Scalar multiplication
-//   Vector3 operator *(float scalar) const {
-//     return {x * scalar, y * scalar, z * scalar};
-//   }
-
-//   // Dot product
-//   float dot(const Vector3& v) const {
-//     return x * v.x + y * v.y + z * v.z;
-//   }
-
-//   // Length of the vector
-//   float length() const {
-//     return sqrt(x * x + y * y + z * z);
-//   }
-
-//   // Cross product
-//   Vector3 cross(const Vector3& v) const {
-//     return {y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x};
-//   }
-
-//   // Normalize the vector
-//   Vector3 normalize() const {
-//     float len = sqrt(x * x + y * y + z * z);
-//     return {x / len, y / len, z / len};
-//   }
-// };
-
+inline Vector3 random_in_hemisphere(const Vector3& normal) {
+    Vector3 in_unit_sphere = random_in_unit_sphere();
+    if (dot(in_unit_sphere, normal) > 0.0) // In the same hemisphere as the normal
+        return in_unit_sphere;
+    else
+        return -in_unit_sphere;
+}
 
 #endif
