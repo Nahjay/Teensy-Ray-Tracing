@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <Adafruit_ILI9341.h>
 #include "vec3.h"
+#include "interval.h"
 
 // Define the color class using the Vector3 type as the underlying data type
 using Color = Vector3;
@@ -14,16 +15,22 @@ void writeColor(int x, int y, Color pixelColor, Adafruit_ILI9341& tft) {
   uint16_t g = uint16_t(255.999 * pixelColor.y());
   uint16_t b = uint16_t(255.999 * pixelColor.z());
 
+  // Utilize the interval class to clamp the color values
+  static const interval intensity(0.000, 255.999);
+  r = intensity.clamp(r);
+  g = intensity.clamp(g);
+  b = intensity.clamp(b);
+
   // Convert the RGB color to a 16-bit color
   uint16_t color = tft.color565(r, g, b);
 
   // Print the color to the Serial Monitor
-    Serial.print("Color: ");
-    Serial.print(r);
-    Serial.print(", ");
-    Serial.print(g);
-    Serial.print(", ");
-    Serial.println(b);
+    // Serial.print("Color: ");
+    // Serial.print(r);
+    // Serial.print(", ");
+    // Serial.print(g);
+    // Serial.print(", ");
+    // Serial.println(b);
   // Write the color to the display
   tft.drawPixel(x, y, color);
 }
