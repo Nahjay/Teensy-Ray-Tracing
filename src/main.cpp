@@ -1,8 +1,6 @@
 #include <Arduino.h>
 #include <Adafruit_ILI9341.h>
-#include <vec3.h>
-#include <color.h>
-#include <ray.h>
+#include <ray_tracing.h>
 
 // Define the pins used for the display
 #define TFT_CS 10
