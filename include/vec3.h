@@ -118,5 +118,45 @@ inline Vector3 unit_vector(Vector3 v) {
     return v / v.length();
 }
 
+// struct Vector3 {
+//   float x, y, z;
+
+//   // Vector addition
+//   Vector3 operator +(const Vector3& v) const {
+//     return {x + v.x, y + v.y, z + v.z};
+//   }
+
+//   // Vector subtraction
+//   Vector3 operator -(const Vector3& v) const {
+//     return {x - v.x, y - v.y, z - v.z};
+//   }
+
+//   // Scalar multiplication
+//   Vector3 operator *(float scalar) const {
+//     return {x * scalar, y * scalar, z * scalar};
+//   }
+
+//   // Dot product
+//   float dot(const Vector3& v) const {
+//     return x * v.x + y * v.y + z * v.z;
+//   }
+
+//   // Length of the vector
+//   float length() const {
+//     return sqrt(x * x + y * y + z * z);
+//   }
+
+//   // Cross product
+//   Vector3 cross(const Vector3& v) const {
+//     return {y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x};
+//   }
+
+//   // Normalize the vector
+//   Vector3 normalize() const {
+//     float len = sqrt(x * x + y * y + z * z);
+//     return {x / len, y / len, z / len};
+//   }
+// };
+
 
 #endif
