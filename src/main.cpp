@@ -15,11 +15,12 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
 
 // Defining a simple hit shpere function
 bool hit_sphere(const point3& center, double radius, const ray& r) {
-  Vector3 oc = r.origin() - center;
+  Vector3 oc = center - r.origin();
   auto a = r.direction().length_squared();
   auto h = dot(r.direction(), oc);
   auto c = oc.length_squared() - radius*radius;
   auto discriminant = h*h - a*c;
+
 
   if (discriminant < 0) {
       return -1.0;
@@ -31,10 +32,10 @@ bool hit_sphere(const point3& center, double radius, const ray& r) {
 // Define the color function
 Color ray_color(const ray& r) {
   // Shaded sphere
-  auto s = hit_sphere(point3(0, 0, -1), 0.5, r);
-  if (s > 0.0) {
-    Vector3 N = unit_vector(r.at(s) - Vector3(0, 0, -1));
-    return 0.5 * Color(N.x() + 1, N.y() + 1, N.z() + 1);
+  auto s = hit_sphere(point3(0,0,-1), 0.5, r);
+  if (s > 0.001) {
+    Vector3 N = unit_vector(r.at(s) - Vector3(0,0,-1));
+    return 0.5*Color(N.x()+1, N.y()+1, N.z()+1);
   }
 
   Vector3 unit_direction = unit_vector(r.direction());
