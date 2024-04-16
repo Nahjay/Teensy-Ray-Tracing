@@ -70,9 +70,41 @@ void loop() {
   // Calculate the location of the upper left pixel should be 0, 0, 0
   auto viewport_upper_left = camera_origin;
 
+  // Render the image
+  for (int y = 0; y < tft.height(); y++) {
+    for (int x = 0; x < tft.width(); x++) {
+      auto u = double(x) / (tft.width() - 1);
+      auto v = double(y) / (tft.height() - 1);
+
+      // Calculate the ray
+      ray r(camera_origin, viewport_upper_left + u * horizontal + v * vertical);
+
+      // Get the color of the ray
+      Color pixel_color = ray_color(r);
+
+      // Print the pixel color to the Serial Monitor
+      Serial.print("Pixel color: ");
+      Serial.print(pixel_color.x());
+      Serial.print(", ");
+      Serial.print(pixel_color.y());
+      Serial.print(", ");
+      Serial.println(pixel_color.z());
+
+      // Print the pixel itsellf to the Serial Monitor
+      Serial.print("Pixel: ");
+      Serial.print(x);
+      Serial.print(", ");
+      Serial.println(y);
+
+
+      // Write the color to the display
+      writeColor(x, y, pixel_color, tft);
+    }
+  }
+
   
 
-  tft.fillScreen(ILI9341_BLUE);
+  // tft.fillScreen(ILI9341_BLUE);
   
-  // delay(1000000); // Delay to view the result for a while
+  delay(1000000); // Delay to view the result for a while
 }

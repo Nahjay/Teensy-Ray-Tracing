@@ -5,9 +5,6 @@
 #include <Adafruit_ILI9341.h>
 #include "vec3.h"
 
-#define TFT_CS 10
-#define TFT_DC 9
-
 // Define the color class using the Vector3 type as the underlying data type
 using Color = Vector3;
 
@@ -20,9 +17,6 @@ void writeColor(int x, int y, Color pixelColor, Adafruit_ILI9341 tft) {
   // Convert the RGB color to a 16-bit color
   uint16_t color = tft.color565(r, g, b);
 
-  // Set the rotation of the display
-  tft.setRotation(3);
-
   // Print the color to the Serial Monitor
     Serial.print("Color: ");
     Serial.print(r);
@@ -31,7 +25,7 @@ void writeColor(int x, int y, Color pixelColor, Adafruit_ILI9341 tft) {
     Serial.print(", ");
     Serial.println(b);
   // Write the color to the display
-  tft.writePixel(x, y, color);
+  tft.drawPixel(x, y, color);
 }
 
 // Define a function to write the color to the display
