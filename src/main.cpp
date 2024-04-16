@@ -89,6 +89,8 @@ bool intersect(const Vector3& rayOrigin, const Vector3& rayDirection, const Sphe
   }
 }
 
+
+
 uint16_t traceRay(Vector3 origin, Vector3 dir, Sphere sphere, Light light, int depth) {
   float t;
   if (!intersect(origin, dir, sphere, t)) {
@@ -105,10 +107,11 @@ uint16_t traceRay(Vector3 origin, Vector3 dir, Sphere sphere, Light light, int d
   intensity = std::max(0.0f, std::min(1.0f, intensity)); // Clamp intensity to [0, 1]
 
    // Calculate a ratio based on the distance to the light source using the inverse square law
-  float distanceRatio = 1.0f / (lightDistance * lightDistance);
+  float distanceRatio = std::min(1.0f, lightDistance / 200.0f); // Assuming a maximum distance of 200 units
 
   // Use the distance ratio to mix the sphere color with another color
-  uint16_t color = mixColors(sphere.color, ILI9341_BLUE, distanceRatio);
+  // uint16_t color = mixColors(sphere.color, ILI9341_BLUE, distanceRatio);
+  uint16_t color = mixColors(sphere.color * intensity, sphere.color , distanceRatio);
 
   // Handling reflections and refractions
   if (depth <= 3) {
@@ -179,8 +182,4 @@ void loop() {
 
 
   delay(1000000); // Delay to view the result for a while
-}// Define the light source
-Light light = {
-  .position = {100, 100, 100}, // Moved farther
-  .intensity = 1.0
-};
+}
