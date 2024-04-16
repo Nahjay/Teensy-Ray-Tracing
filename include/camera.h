@@ -4,10 +4,15 @@
 #include "ray_tracing.h"
 #include "hittable.h"
 #include <Adafruit_ILI9341.h>
+#include <limits>
+
+const double infi = std::numeric_limits<double>::infinity();
 
 class camera {
     public:
         void render(Adafruit_ILI9341& tft, const hittable& world) {
+            initialize(tft);
+
             for (int j = tft.height() - 1; j >= 0; --j) {
                 for (int i = 0; i < tft.width(); ++i) {
                     auto u = double(i) / (tft.width() - 1);
@@ -37,7 +42,7 @@ class camera {
 
     Color ray_color(const ray& r, const hittable& world) {
         hit_record rec;
-        if (world.hit(r, interval(0, inf), rec)) {
+        if (world.hit(r, interval(0, infi), rec)) {
             return 0.5 * Color(rec.normal.x() + 1, rec.normal.y() + 1, rec.normal.z() + 1);
         }
         Vector3 unit_direction = unit_vector(r.direction());
