@@ -65,7 +65,7 @@ using Color = Vector3;    // RGB color
 // inline functions are functions that are defined in a header file and are meant to be inlined by the compiler.
 // Inlining is an optimization that eliminates the function call overhead by inserting the code of the function directly into the caller's code.
 // Inlining is not always beneficial, as it can increase the size of the compiled code.
-// In general, inlining is beneficial for small functions that are called frequently.
+// In general, i is beneficial for small functions that are called frequently.
 
 // Inline function to output the vector using the Serial Monitor
 inline void outputVector(const Vector3& v) {
