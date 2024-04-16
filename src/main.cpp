@@ -60,7 +60,6 @@ void loop() {
   // Camera
   auto viewport_height = 2.0;
   auto viewport_width = aspect_ratio * viewport_height;
-  auto focal_length = 1.0;
   auto camera_origin = point3(0, 0, 0);
 
   // Calculate the horizontal and vertical vectors
