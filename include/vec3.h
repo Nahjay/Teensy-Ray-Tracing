@@ -60,4 +60,63 @@ class Vector3 {
 using Point3 = Vector3;   // 3D point
 using Color = Vector3;    // RGB color
 
+// Utility Functions
+
+// inline functions are functions that are defined in a header file and are meant to be inlined by the compiler.
+// Inlining is an optimization that eliminates the function call overhead by inserting the code of the function directly into the caller's code.
+// Inlining is not always beneficial, as it can increase the size of the compiled code.
+// In general, inlining is beneficial for small functions that are called frequently.
+
+// Inline function to output the vector using the Serial Monitor
+inline void outputVector(const Vector3& v) {
+    Serial.print("(");
+    Serial.print(v.x());
+    Serial.print(", ");
+    Serial.print(v.y());
+    Serial.print(", ");
+    Serial.print(v.z());
+    Serial.println(")");
+}
+
+inline Vector3 operator+(const Vector3 &u, const Vector3 &v) {
+    return Vector3(u.e[0] + v.e[0], u.e[1] + v.e[1], u.e[2] + v.e[2]);
+}
+
+inline Vector3 operator-(const Vector3 &u, const Vector3 &v) {
+    return Vector3(u.e[0] - v.e[0], u.e[1] - v.e[1], u.e[2] - v.e[2]);
+}
+
+inline Vector3 operator*(const Vector3 &u, const Vector3 &v) {
+    return Vector3(u.e[0] * v.e[0], u.e[1] * v.e[1], u.e[2] * v.e[2]);
+}
+
+inline Vector3 operator*(double t, const Vector3 &v) {
+    return Vector3(t*v.e[0], t*v.e[1], t*v.e[2]);
+}
+
+inline Vector3 operator*(const Vector3 &v, double t) {
+    return t * v;
+}
+
+inline Vector3 operator/(Vector3 v, double t) {
+    return (1/t) * v;
+}
+
+inline double dot(const Vector3 &u, const Vector3 &v) {
+    return u.e[0] * v.e[0]
+         + u.e[1] * v.e[1]
+         + u.e[2] * v.e[2];
+}
+
+inline Vector3 cross(const Vector3 &u, const Vector3 &v) {
+    return Vector3(u.e[1] * v.e[2] - u.e[2] * v.e[1],
+                   u.e[2] * v.e[0] - u.e[0] * v.e[2],
+                   u.e[0] * v.e[1] - u.e[1] * v.e[0]);
+}
+
+inline Vector3 unit_vector(Vector3 v) {
+    return v / v.length();
+}
+
+
 #endif
