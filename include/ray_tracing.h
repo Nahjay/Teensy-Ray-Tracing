@@ -17,6 +17,7 @@
 #include "hittable_list.h"
 #include "sphere.h"
 #include "interval.h"
+#include "camera.h"
 
 // Useful stuff from C++ Standard Library
 using std::make_shared;
