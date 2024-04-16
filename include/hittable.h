@@ -14,6 +14,7 @@ class hit_record {
             front_face = dot(r.direction(), outward_normal) < 0;
             normal = front_face ? outward_normal : -outward_normal;
         }
+
 };
 class hittable {
     public:
