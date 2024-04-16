@@ -36,6 +36,7 @@ void loop() {
   // Create the camera
   camera cam;
   cam.sample_per_pixel = 10;
+  cam.max_depth = 50;
   cam.render(tft, world);
   
   delay(1000000); // Delay to view the result for a while
