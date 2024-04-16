@@ -116,9 +116,25 @@ uint16_t traceRay(Vector3 origin, Vector3 dir, const std::vector<Sphere>& sphere
       Vector3 normal = (hit - sphere.center).normalize();
       Vector3 lightDir = (light.position - hit).normalize();
       float distanceToLight = (light.position - hit).length();
-      float intensity = max(0.0, normal.dot(lightDir)) / (distanceToLight * distanceToLight); // Apply the inverse square law
-      intensity = min(1.0, intensity); // Clamp the intensity between 0.0 and 1.0
-      uint16_t color = intensity < 0.1 ? sphere.color : ILI9341_BLACK;
+      // float intensity = max(0.0, normal.dot(lightDir)) / (distanceToLight * distanceToLight); // Apply the inverse square law
+      // intensity = min(1.0, intensity); // Clamp the intensity between 0.0 and 1.0
+      // uint16_t color = intensity < 0.1 ? sphere.color : ILI9341_BLACK;
+
+      // float lightDistance = (light.position - hitPoint).length();
+
+      // Calculate the light distance
+      Vector3 toLight = light.position - hit;
+      float lightDistance = toLight.length();
+
+       // Lighting calculation
+      float intensity = std::max(0.0f, normal.dot(toLight)) / (lightDistance * lightDistance);
+      intensity = std::max(0.0f, std::min(1.0f, intensity)); // Clamp intensity to [0, 1]
+
+      // Calculate a ratio based on the distance to the light source using the inverse square law
+      float distanceRatio = std::min(1.0f, lightDistance / 200.0f); // Assuming a maximum distance of 200 units
+
+      // Use the distance ratio to mix the sphere color with another color
+      uint16_t color = mixColors(sphere.color * intensity, sphere.color , distanceRatio);
 
       Serial.print("Intersection at t = ");
       Serial.println(t);
@@ -197,7 +213,7 @@ void loop() {
   delay(1000);
 
   // Light source is moved closer to the spheres and has a higher intensity
-  Light light = {{10, 10, 0}, 10000000000.0};
+  Light light = {{0, 0, -22}, 1.0};
 
   // Metallic sphere is moved closer to the eye and has a larger radius
   // Sphere metallicSphere = {{10, 10, -20}, 10, 0.2, 0.9, 0.1}; 
