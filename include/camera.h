@@ -11,6 +11,7 @@ const double infi = std::numeric_limits<double>::infinity();
 class camera {
     public:
         int sample_per_pixel;
+        int max_depth;
 
         void render(Adafruit_ILI9341& tft, const hittable& world) {
             initialize(tft);
@@ -22,7 +23,7 @@ class camera {
                         auto u = (double(i) + random_double()) / (tft.width() - 1);
                         auto v = (double(j) + random_double()) / (tft.height() - 1);
                         ray r(camera_origin, viewport_upper_left + u * horizontal + v * vertical - camera_origin);
-                        pixel_color += ray_color(r, world);
+                        pixel_color += ray_color(r, max_depth, world);
                     }
                     pixel_color *= pixel_samples_scale;
                     writeColor(i, j, pixel_color, tft);
@@ -57,11 +58,16 @@ class camera {
         return Vector3(random_double() - 0.5, random_double() - 0.5, 0);
     }
 
-    Color ray_color(const ray& r, const hittable& world) {
+    Color ray_color(const ray& r, int depth, const hittable& world) const {
+        // Establish the base case for the recursion
+        if (depth <= 0) {
+            return Color(0, 0, 0);
+        }
+
         hit_record rec;
         if (world.hit(r, interval(0, infi), rec)) {
             Vector3 direction = random_on_hemisphere(rec.normal);
-            return 0.5 * ray_color(ray(rec.p, direction), world);
+            return 0.5 * ray_color(ray(rec.p, direction), depth-1, world);
             // return 0.5 * Color(rec.normal.x() + 1, rec.normal.y() + 1, rec.normal.z() + 1);
         }
         Vector3 unit_direction = unit_vector(r.direction());
