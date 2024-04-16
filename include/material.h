@@ -47,4 +47,9 @@ class metal : public material {
         Color albedo;
         double fuzz;
 };
+
+class dielectric : public material {
+    // Coming soon
+
+};
 #endif
