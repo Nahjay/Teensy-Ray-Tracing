@@ -61,7 +61,7 @@ double hit_sphere(const point3& center, double radius, const ray& r) {
 Color ray_color(const ray& r, const hittable& world) {
   hit_record rec;
 
-  if (world.hit(r, 0, inf, rec)) {
+  if (world.hit(r, interval(0, inf), rec)) {
     return 0.5 * Color(rec.normal.x() + 1, rec.normal.y() + 1, rec.normal.z() + 1);
   }
 
