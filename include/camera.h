@@ -3,6 +3,7 @@
 
 #include "ray_tracing.h"
 #include "hittable.h"
+#include "material.h"
 #include <Adafruit_ILI9341.h>
 #include <limits>
 
@@ -66,8 +67,14 @@ class camera {
 
         hit_record rec;
         if (world.hit(r, interval(0.001, infi), rec)) {
-            Vector3 direction = rec.normal + random_unit_vector();
-            return 0.1 * ray_color(ray(rec.p, direction), depth-1, world);
+            ray scattered;
+            Color attenuation;
+            if (rec.mat_ptr->scatter(r, rec, attenuation, scattered)) {
+                return attenuation * ray_color(scattered, depth-1, world);
+            }
+            return Color(0, 0, 0);
+            // Vector3 direction = rec.normal + random_unit_vector();
+            // retxurn 0.1 * ray_color(ray(rec.p, direction), depth-1, world);
         }
         Vector3 unit_direction = unit_vector(r.direction());
         auto t = 0.5 * (unit_direction.y() + 1.0);
