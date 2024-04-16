@@ -6,7 +6,7 @@
 
 class sphere : public hittable {
     public:
-        sphere(const point3& cen, double rad) : center(cen), radius(fmax(0, rad)) {};
+        sphere(const point3& cen, double rad) : center(cen), radius(fmax(0, rad)), mat_ptr(mat_ptr) {};
 
     bool hit (const ray& r, interval ray_t, hit_record& rec) const override {
         Vector3 oc = r.origin() - center;
