@@ -6,29 +6,29 @@
 class interval {
   public:
     // Define the minimum and maximum values of the interval
-    double min, max;
+    float min, max;
 
     // Define the default constructor
-    interval() : min(std::numeric_limits<double>::infinity()), max(-std::numeric_limits<double>::infinity()) {}
-    interval(double min, double max) : min(min), max(max) {}
+    interval() : min(std::numeric_limits<float>::infinity()), max(-std::numeric_limits<float>::infinity()) {}
+    interval(float min, float max) : min(min), max(max) {}
 
     // Define the size of the interval
-    double size() const {
+    float size() const {
         return max - min;
     }
 
     // Define the center of the interval
-    bool contains(double x) const {
+    bool contains(float x) const {
         return min <= x && x <= max;
     }
 
     // Define the surrounding interval
-    bool surrounds(double x) const {
+    bool surrounds(float x) const {
         return min < x && x < max;
     }
 
     // Define the intersection of the interval
-    double clamp(double x) const {
+    float clamp(float x) const {
         return x < min ? min : x > max ? max : x;
     }
 
@@ -37,7 +37,7 @@ class interval {
 };
 
 // Define the empty and universe intervals
-const interval interval::empty = interval(std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity());
-const interval interval::universe = interval(-std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
+const interval interval::empty = interval(std::numeric_limits<float>::infinity(), -std::numeric_limits<float>::infinity());
+const interval interval::universe = interval(-std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity());
 
 #endif

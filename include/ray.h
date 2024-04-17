@@ -18,7 +18,7 @@ class ray {
         // Define the origin, direction, and at methods
         point3 origin() const  { return orig; }
         Vector3 direction() const { return dir; }
-        point3 at(double t) const {
+        point3 at(float t) const {
             return orig + t*dir;
         }
 

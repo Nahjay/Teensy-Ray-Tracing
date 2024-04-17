@@ -7,19 +7,19 @@
 #include <Adafruit_ILI9341.h>
 #include <limits>
 
-const double infi = std::numeric_limits<double>::infinity();
+const float infi = std::numeric_limits<float>::infinity();
 
 class camera {
     public:
         // Camera constructor
         int sample_per_pixel;
         int max_depth;
-        double vfov;
+        float vfov;
         point3 lookfrom;
         point3 lookat;
         Vector3 vup;
-        double defocus_angle;
-        double focus_distance;
+        float defocus_angle;
+        float focus_distance;
 
         void render(Adafruit_ILI9341& tft, const hittable& world) {
             // Render the scene to the display
@@ -32,8 +32,8 @@ class camera {
                 for (int i = 0; i < tft.width(); ++i) {
                     Color pixel_color(0, 0, 0);
                     for (int sample = 0; sample < sample_per_pixel; ++sample) {
-                        auto u = (double(i) + random_double()) / (tft.width() - 1);
-                        auto v = (double(j) + random_double()) / (tft.height() - 1);
+                        auto u = (float(i) + random_float()) / (tft.width() - 1);
+                        auto v = (float(j) + random_float()) / (tft.height() - 1);
                         ray r(camera_origin, viewport_upper_left + u * horizontal + v * vertical - camera_origin);
                         pixel_color += ray_color(r, max_depth, world);
                     }
@@ -49,7 +49,7 @@ class camera {
         Vector3 horizontal;
         Vector3 vertical;
         point3 viewport_upper_left;
-        double pixel_samples_scale;
+        float pixel_samples_scale;
         Vector3 u, v, w;
         Vector3 defocus_disk_u;
         Vector3 defocus_disk_v;
@@ -107,7 +107,7 @@ class camera {
 
     Vector3 sample_square() const {
         // Returns a random point in the unit square.
-        return Vector3(random_double() - 0.5, random_double() - 0.5, 0);
+        return Vector3(random_float() - 0.5, random_float() - 0.5, 0);
     }
 
     point3 defocus_disk_sample() const {

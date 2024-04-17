@@ -26,24 +26,24 @@ using std::sqrt;
 using std::fabs;
 
 // Constants
-const double inf = std::numeric_limits<double>::infinity();
-const double pi = 3.1415926535897932385;
+const float inf = std::numeric_limits<float>::infinity();
+const float pi = 3.1415926535897932385;
 
 // Utility Functions
 
 // Degrees to Radians
-inline double degrees_to_radians(double degrees) {
+inline float degrees_to_radians(float degrees) {
     return degrees * pi / 180.0;
 }
 
 // Random Number Generation
-inline double random_double() {
+inline float random_float() {
     return rand() / (RAND_MAX + 1.0);
 }
 
 // Random Number Generation with Range
-inline double random_double(double min, double max) {
-    return min + (max-min)*random_double();
+inline float random_float(float min, float max) {
+    return min + (max-min)*random_float();
 }
 
 #endif

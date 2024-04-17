@@ -11,21 +11,21 @@ class Vector3 {
     // Define the public variables
 
     // The vector components
-    double e[3];
+    float e[3];
 
     // Define the constructors
     Vector3() : e{0, 0, 0} {}
-    Vector3(double e0, double e1, double e2) : e{e0, e1, e2} {}
+    Vector3(float e0, float e1, float e2) : e{e0, e1, e2} {}
 
     // Define the x, y, and z methods
-    double x() const { return e[0]; }
-    double y() const { return e[1]; }
-    double z() const { return e[2]; }
+    float x() const { return e[0]; }
+    float y() const { return e[1]; }
+    float z() const { return e[2]; }
 
     // Define the unary operators
     Vector3 operator-() const { return Vector3(-e[0], -e[1], -e[2]); }
-    double operator[](int i) const { return e[i]; }
-    double& operator[](int i) { return e[i]; }
+    float operator[](int i) const { return e[i]; }
+    float& operator[](int i) { return e[i]; }
 
     // Define the vector arithmetic operators
     Vector3& operator+=(const Vector3 &v) {
@@ -38,7 +38,7 @@ class Vector3 {
 
     // Define the vector arithmetic operators
 
-    Vector3& operator*=(const double t) {
+    Vector3& operator*=(const float t) {
         // Multiply the vector by the scalar
         e[0] *= t;
         e[1] *= t;
@@ -46,41 +46,41 @@ class Vector3 {
         return *this;
     }
 
-    Vector3& operator/=(const double t) {
+    Vector3& operator/=(const float t) {
         // Multiply the vector by the reciprocal of the scalar
         return *this *= 1/t;
     }
 
-    double length() const {
+    float length() const {
         // Return the length of the vector
         return sqrt(length_squared());
     }
 
-    double length_squared() const {
+    float length_squared() const {
         // Return the squared length of the vector
         return e[0]*e[0] + e[1]*e[1] + e[2]*e[2];
     }
 
     // Utility Functions
 
-    static double random_double() {
+    static float random_float() {
         // Returns a random real in [0,1).
         return rand() / (RAND_MAX + 1.0);
     }
 
-    static double random_double(double min, double max) {
+    static float random_float(float min, float max) {
         // Returns a random real in [min,max).
-        return min + (max-min)*random_double();
+        return min + (max-min)*random_float();
     }
 
     static Vector3 random() {
         //  Returns a random vector with components in [0,1).
-        return Vector3(random_double(), random_double(), random_double());
+        return Vector3(random_float(), random_float(), random_float());
     }
 
-    static Vector3 random(double min, double max) {
+    static Vector3 random(float min, float max) {
         // Returns a random vector with components in [min,max).
-        return Vector3(random_double(min, max), random_double(min, max), random_double(min, max));
+        return Vector3(random_float(min, max), random_float(min, max), random_float(min, max));
     }
 
     bool near_zero() const {
@@ -110,22 +110,22 @@ inline Vector3 operator*(const Vector3 &u, const Vector3 &v) {
     return Vector3(u.e[0] * v.e[0], u.e[1] * v.e[1], u.e[2] * v.e[2]);
 }
 
-inline Vector3 operator*(double t, const Vector3 &v) {
+inline Vector3 operator*(float t, const Vector3 &v) {
     // Multiply a vector by a scalar
     return Vector3(t*v.e[0], t*v.e[1], t*v.e[2]);
 }
 
-inline Vector3 operator*(const Vector3 &v, double t) {
+inline Vector3 operator*(const Vector3 &v, float t) {
     // Multiply a vector by a scalar
     return t * v;
 }
 
-inline Vector3 operator/(Vector3 v, double t) {
+inline Vector3 operator/(Vector3 v, float t) {
     // Divide a vector by a scalar
     return (1/t) * v;
 }
 
-inline double dot(const Vector3 &u, const Vector3 &v) {
+inline float dot(const Vector3 &u, const Vector3 &v) {
     // Calculate the dot product of two vectors
     return u.e[0] * v.e[0]
          + u.e[1] * v.e[1]
@@ -161,7 +161,7 @@ inline Vector3 random_unit_vector() {
 inline Vector3 random_in_unit_disk() {
     // Returns a random vector in the unit disk.
     while (true) {
-        auto p = Vector3(Vector3::random_double(-1,1), Vector3::random_double(-1,1), 0);
+        auto p = Vector3(Vector3::random_float(-1,1), Vector3::random_float(-1,1), 0);
         if (p.length_squared() < 1)
             return p;
     }
@@ -181,7 +181,7 @@ inline Vector3 reflect(const Vector3& v, const Vector3& n) {
     return v - 2*dot(v,n)*n;
 }
 
-inline Vector3 refract(const Vector3& uv, const Vector3& n, double etai_over_etat) {
+inline Vector3 refract(const Vector3& uv, const Vector3& n, float etai_over_etat) {
     // Refract the vector uv around the normal n
     auto cos_theta = fmin(dot(-uv, n), 1.0);
     Vector3 r_out_perp = etai_over_etat * (uv + cos_theta*n);

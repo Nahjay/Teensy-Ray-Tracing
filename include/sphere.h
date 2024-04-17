@@ -9,7 +9,7 @@ class sphere : public hittable {
     public:
 
         // Define the public methods and constructors
-        sphere(const point3& cen, double rad, shared_ptr<material> m) : center(cen), radius(fmax(0, rad)), mat_ptr(m) {};
+        sphere(const point3& cen, float rad, shared_ptr<material> m) : center(cen), radius(fmax(0, rad)), mat_ptr(m) {};
 
         // Define the hit method
         virtual bool hit (const ray& r, interval ray_t, hit_record& rec) const override {
@@ -51,7 +51,7 @@ class sphere : public hittable {
     private:
         // Define the private variables
         point3 center;
-        double radius;
+        float radius;
         shared_ptr<material> mat_ptr;
 };
 

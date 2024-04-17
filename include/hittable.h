@@ -16,7 +16,7 @@ class hit_record {
         // Define the constructors
         point3 p;
         Vector3 normal;
-        double t;
+        float t;
         bool front_face;
         std::shared_ptr<material> mat_ptr;
 

@@ -34,8 +34,8 @@ void setup() {
     // Create the random spheres for the final scene
     for (int a = -11; a < 11; a++) {
         for (int b = -11; b < 11; b++) {
-            auto choose_mat = random_double();
-            point3 center(a + 0.9*random_double(), 0.2, b + 0.9*random_double());
+            auto choose_mat = random_float();
+            point3 center(a + 0.9*random_float(), 0.2, b + 0.9*random_float());
 
             if ((center - point3(4, 0.2, 0)).length() > 0.9) {
                 shared_ptr<material> sphere_material;
@@ -48,7 +48,7 @@ void setup() {
                 } else if (choose_mat < 0.95) {
                     // metal
                     auto albedo = Color::random(0.5, 1);
-                    auto fuzz = random_double(0, 0.5);
+                    auto fuzz = random_float(0, 0.5);
                     sphere_material = make_shared<metal>(albedo, fuzz);
                     world.add(make_shared<sphere>(center, 0.2, sphere_material));
                 } else {
@@ -74,8 +74,8 @@ void setup() {
     camera cam;
 
     // Set the camera properties
-    cam.sample_per_pixel = 1;
-    cam.max_depth = 50;
+    cam.sample_per_pixel = 10;
+    cam.max_depth = 30;
     cam.vfov = 20;
     cam.lookfrom = point3(13,2,3);
     cam.lookat = point3(0,0,0);
