@@ -145,6 +145,14 @@ inline Vector3 random_unit_vector() {
     return unit_vector(random_in_unit_sphere());
 }
 
+inline Vector3 random_in_unit_disk() {
+    while (true) {
+        auto p = Vector3(Vector3::random_double(-1,1), Vector3::random_double(-1,1), 0);
+        if (p.length_squared() < 1)
+            return p;
+    }
+}
+
 inline Vector3 random_on_hemisphere(const Vector3& normal) {
     Vector3 in_unit_sphere = random_in_unit_sphere();
     if (dot(in_unit_sphere, normal) > 0.0) // In the same hemisphere as the normal

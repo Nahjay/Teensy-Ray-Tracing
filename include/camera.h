@@ -18,6 +18,9 @@ class camera {
         point3 lookat;
         Vector3 vup;
 
+        double defocus_angle;
+        double focus_distance;
+
         void render(Adafruit_ILI9341& tft, const hittable& world) {
             initialize(tft);
 
@@ -43,6 +46,9 @@ class camera {
         point3 viewport_upper_left;
         double pixel_samples_scale;
         Vector3 u, v, w;
+        Vector3 defocus_disk_u;
+        Vector3 defocus_disk_v;
+
 
     void initialize(Adafruit_ILI9341& tft) {
         // auto aspect_ratio = tft.width() / tft.height();
@@ -69,7 +75,7 @@ class camera {
         auto theta = degrees_to_radians(vfov);
         auto h = tan(theta / 2);
         auto focal_length = (lookfrom - lookat).length();
-        auto viewport_height = 2.0 * h * focal_length;
+        auto viewport_height = 2.0 * h * focus_distance;
         auto viewport_width = aspect_ratio * viewport_height;
 
         pixel_samples_scale = 1.0 / sample_per_pixel;
@@ -85,17 +91,29 @@ class camera {
         horizontal = viewport_u;
         vertical = viewport_v;
 
-        viewport_upper_left = camera_origin - viewport_u / 2 - viewport_v / 2 - w * focal_length;
+        // viewport_upper_left = camera_origin - (focus_distance * w) - viewport_u / 2 + viewport_v / 2;
+        viewport_upper_left = camera_origin - (focal_length * w) - viewport_u/2 - viewport_v/2;
+
+        auto defocus_radius = focus_distance * tan(degrees_to_radians(defocus_angle / 2));
+        defocus_disk_u = u * defocus_radius;
+        defocus_disk_v = v * defocus_radius;
 
     }
 
     ray get_ray(int i, int j) const {
         auto offset = sample_square();
-        return ray(camera_origin, viewport_upper_left + (i + offset.x()) * horizontal + (j + offset.y()) * vertical - camera_origin);
+        auto ray_origin = (defocus_angle <= 0) ? camera_origin : defocus_disk_sample();
+        return ray(ray_origin, viewport_upper_left + (i + offset.x()) * horizontal + (j + offset.y()) * vertical - ray_origin);
     }
 
     Vector3 sample_square() const {
         return Vector3(random_double() - 0.5, random_double() - 0.5, 0);
+    }
+
+    point3 defocus_disk_sample() const {
+        // Returns a random point in the camera defocus disk.
+        auto p = random_in_unit_disk();
+        return camera_origin + (p[0] * defocus_disk_u) + (p[1] * defocus_disk_v);
     }
 
     Color ray_color(const ray& r, int depth, const hittable& world) const {
