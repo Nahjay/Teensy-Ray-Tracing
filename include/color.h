@@ -37,17 +37,8 @@ void writeColor(int x, int y, Color pixelColor, Adafruit_ILI9341& tft) {
   // Convert the RGB color to a 16-bit color
   uint16_t color = tft.color565(r, g, b);
 
-  // Print the color to the Serial Monitor
-    // Serial.print("Color: ");
-    // Serial.print(r);
-    // Serial.print(", ");
-    // Serial.print(g);
-    // Serial.print(", ");
-    // Serial.println(b);
   // Write the color to the display
   tft.drawPixel(x, y, color);
 }
-
-// Define a function to write the color to the display
 
 #endif 
