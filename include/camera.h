@@ -14,6 +14,9 @@ class camera {
         int sample_per_pixel;
         int max_depth;
         double vfov;
+        point3 lookfrom;
+        point3 lookat;
+        Vector3 vup;
 
         void render(Adafruit_ILI9341& tft, const hittable& world) {
             initialize(tft);
@@ -39,18 +42,51 @@ class camera {
         Vector3 vertical;
         point3 viewport_upper_left;
         double pixel_samples_scale;
+        Vector3 u, v, w;
 
     void initialize(Adafruit_ILI9341& tft) {
+        // auto aspect_ratio = tft.width() / tft.height();
+        // auto theta = degrees_to_radians(vfov);
+        // auto h = tan(theta / 2);
+        // auto focal_length = (lookfrom - lookat).length();
+        // auto viewport_height = 2.0 * h * focal_length;
+        // auto viewport_width = aspect_ratio * viewport_height;
+        // // auto focal_length = (lookfrom - lookat).length();
+        // pixel_samples_scale = 1.0 / sample_per_pixel;
+        // // camera_origin = point3(0, 0, 0);
+        // camera_origin = lookfrom;
+        // w = unit_vector(lookfrom - lookat);
+        // u = unit_vector(cross(vup, w));
+        // v = cross(w, u);
+        // // horizontal = viewport_width * u;
+        // Vector3 viewport_u = viewport_width * u;
+        // Vector3 viewport_v = viewport_height * v;
+        // horizontal = Vector3(viewport_width, 0, 0);
+        // vertical = Vector3(0, -viewport_height, 0);
+        // // viewport_upper_left = camera_origin - horizontal / 2 - vertical / 2 - Vector3(0, 0, 1);
+        // auto viewport_upper_left = camera_origin - (focal_length * w) - viewport_u / 2 + viewport_v / 2;
         auto aspect_ratio = tft.width() / tft.height();
         auto theta = degrees_to_radians(vfov);
         auto h = tan(theta / 2);
-        auto viewport_height = 2.0 * h;
+        auto focal_length = (lookfrom - lookat).length();
+        auto viewport_height = 2.0 * h * focal_length;
         auto viewport_width = aspect_ratio * viewport_height;
+
         pixel_samples_scale = 1.0 / sample_per_pixel;
-        camera_origin = point3(0, 0, 0);
-        horizontal = Vector3(viewport_width, 0, 0);
-        vertical = Vector3(0, -viewport_height, 0);
-        viewport_upper_left = camera_origin - horizontal / 2 - vertical / 2 - Vector3(0, 0, 1);
+        camera_origin = lookfrom;
+
+        w = unit_vector(lookfrom - lookat);
+        u = unit_vector(cross(vup, w));
+        v = cross(w, u);
+
+        Vector3 viewport_u = viewport_width * u;
+        Vector3 viewport_v = viewport_height * -v;  // Note the negative sign here
+
+        horizontal = viewport_u;
+        vertical = viewport_v;
+
+        viewport_upper_left = camera_origin - viewport_u / 2 - viewport_v / 2 - w * focal_length;
+
     }
 
     ray get_ray(int i, int j) const {
