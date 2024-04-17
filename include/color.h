@@ -18,24 +18,24 @@ inline double linear_to_gamma(double linear_component) {
 }
 
 void writeColor(int x, int y, Color pixelColor, Adafruit_ILI9341& tft) {
-  // Convert the color to 16-bit values
-  uint16_t r = uint16_t(255.999 * pixelColor.x());
-  uint16_t g = uint16_t(255.999 * pixelColor.y());
-  uint16_t b = uint16_t(255.999 * pixelColor.z());
-
   // Apply gamma correction
-  r = uint16_t(255.999 * linear_to_gamma(r / 255.999));
-  g = uint16_t(255.999 * linear_to_gamma(g / 255.999));
-  b = uint16_t(255.999 * linear_to_gamma(b / 255.999));
+  double r = linear_to_gamma(pixelColor.x());
+  double g = linear_to_gamma(pixelColor.y());
+  double b = linear_to_gamma(pixelColor.z());
 
   // Utilize the interval class to clamp the color values
-  static const interval intensity(0.000, 255.999);
+  static const interval intensity(0.000, 1.000);
   r = intensity.clamp(r);
   g = intensity.clamp(g);
   b = intensity.clamp(b);
 
+  // Convert the color to 16-bit values
+  uint16_t r16 = uint16_t(255.999 * r);
+  uint16_t g16 = uint16_t(255.999 * g);
+  uint16_t b16 = uint16_t(255.999 * b);
+
   // Convert the RGB color to a 16-bit color
-  uint16_t color = tft.color565(r, g, b);
+  uint16_t color = tft.color565(r16, g16, b16);
 
   // Write the color to the display
   tft.drawPixel(x, y, color);

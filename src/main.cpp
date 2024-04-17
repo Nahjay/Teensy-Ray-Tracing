@@ -21,10 +21,7 @@ void setup() {
 
   // Set the rotation of the display
   tft.setRotation(3);
-}
 
-void loop() {
-    // Clear the display
     tft.fillScreen(ILI9341_BLACK);
 
     // Create the World
@@ -78,19 +75,20 @@ void loop() {
 
     // Set the camera properties
     cam.sample_per_pixel = 5;
-    cam.max_depth         = 50;
-    cam.vfov     = 20;
+    cam.max_depth = 50;
+    cam.vfov = 20;
     cam.lookfrom = point3(13,2,3);
-    cam.lookat   = point3(0,0,0);
-    cam.vup      = Vector3(0,1,0);
+    cam.lookat = point3(0,0,0);
+    cam.vup = Vector3(0,1,0);
 
     // Set the defocus (Depth of Field) properties
     cam.defocus_angle = 0.6;
-    cam.focus_distance    = 10.0;
+    cam.focus_distance = 10.0;
 
     // Render the scene
     cam.render(tft, world);
-    
-    // Delay to view the result for a while
-    delay(10000000); 
+}
+
+void loop() {
+    // Do nothing
 }
