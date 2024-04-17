@@ -13,6 +13,7 @@ class camera {
     public:
         int sample_per_pixel;
         int max_depth;
+        double vfov;
 
         void render(Adafruit_ILI9341& tft, const hittable& world) {
             initialize(tft);
@@ -41,7 +42,9 @@ class camera {
 
     void initialize(Adafruit_ILI9341& tft) {
         auto aspect_ratio = tft.width() / tft.height();
-        auto viewport_height = 2.0;
+        auto theta = degrees_to_radians(vfov);
+        auto h = tan(theta / 2);
+        auto viewport_height = 2.0 * h;
         auto viewport_width = aspect_ratio * viewport_height;
         pixel_samples_scale = 1.0 / sample_per_pixel;
         camera_origin = point3(0, 0, 0);
