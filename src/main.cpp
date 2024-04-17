@@ -74,7 +74,7 @@ void setup() {
     camera cam;
 
     // Set the camera properties
-    cam.sample_per_pixel = 5;
+    cam.sample_per_pixel = 1;
     cam.max_depth = 50;
     cam.vfov = 20;
     cam.lookfrom = point3(13,2,3);
