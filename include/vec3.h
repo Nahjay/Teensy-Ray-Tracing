@@ -135,10 +135,9 @@ inline Vector3 unit_vector(Vector3 v) {
 
 inline Vector3 random_in_unit_sphere() {
     while (true) {
-        auto p = Vector3::random(-1, 1);
-        if (p.length_squared() >= 1) continue;
-        return p;
-    }
+        auto p = Vector3(random_double(-1,1), random_double(-1,1), 0);
+        if (p.length_squared() < 1) return p;
+        }
 }
 
 inline Vector3 random_unit_vector() {
