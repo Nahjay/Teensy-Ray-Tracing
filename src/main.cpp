@@ -113,7 +113,7 @@ void loop() {
   // cam.vup = Vector3(0, 1, 0);
   // cam.defocus_angle = 10.0;
   // cam.focus_distance   = 3.4;
-  cam.sample_per_pixel = 500;
+  cam.sample_per_pixel = 10;
   cam.max_depth         = 50;
 
   cam.vfov     = 20;
