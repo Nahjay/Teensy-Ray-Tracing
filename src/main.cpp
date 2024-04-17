@@ -1,5 +1,3 @@
-#include <Arduino.h>
-#include <Adafruit_ILI9341.h>
 #include <ray_tracing.h>
 #include <camera.h>
 #include "material.h"
