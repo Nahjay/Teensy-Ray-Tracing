@@ -29,7 +29,7 @@ Contains all the source files for the project.
 ### Platformio.ini
 Contains the configuration settings for the PlatformIO build system.
 
-## Hardware Wiring Schematic Used
+## Hardware Setup
 The Adafruit ILI9341 display is connected to the Teensy 4.1 using the following pinout table provided by PJRC:
 
 ![Screenshot from 2024-04-17 19-35-41](https://github.com/Nahjay/Teensy-Ray-Tracing/assets/127258036/b17b3da6-1cd9-42e5-bf9a-0cdd821285ba)
